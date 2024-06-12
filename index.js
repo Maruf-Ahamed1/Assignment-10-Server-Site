@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 require('dotenv').config()
-const { MongoClient, ServerApiVersion, Long } = require('mongodb');
+const { MongoClient, ServerApiVersion, Long, ObjectId } = require('mongodb');
 const app = express()
 const port = process.env.PORT || 5000;
 
@@ -32,13 +32,68 @@ async function run() {
 
     //___Database name____//
     const CraftCollection = client.db("CraftDB").collection('craft')
-
+        //_______POST________//
     app.post('/add',async(req,res)=>{
         console.log(req.body)
         const result = await CraftCollection.insertOne(req.body)
-        console.log(result);
+        // console.log(result);
         res.send(result)
     })
+        //________GET_________//
+    app.get('/my/:email',async(req,res)=>{
+      console.log(req.params.email)
+      const result = await CraftCollection.find({email:req.params.email}).toArray()
+      res.send(result)
+    })
+        //________GET-2_________//
+    app.get("/singleDetails/:id",async(req,res) =>{
+      console.log(req.params.id)
+      const result = await CraftCollection.findOne({_id: new ObjectId(req.params.id),})
+      console.log(result)
+      res.send(result)
+    })
+
+    app.put("/updateCraft/:id",async(req,res) => {
+      console.log(req.params.id)
+      const query = {_id: new ObjectId(req.params.id)}
+      const data = {
+        $set:{
+          name:req.body.Category_Name,
+          name:req.body.price,
+        }
+      }
+      const result = await CraftCollection.updateOne(query,data)
+      console.log(result);
+      res.send(result)
+    })
+
+
+
+
+
+
+
+
+
+
+
+      //________Update________//
+      // app.get('/my/:id',async(req,res)=>{
+      //   const id = req.params.id;
+      //   const query = {_id: new ObjectId(id)}
+      //   const result = await CraftCollection.findOne(query)
+      //   res.send(result)
+      // })
+      //__________Delete___________//
+    app.delete('/my/:id',async(req,res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await CraftCollection.deleteOne(query)
+      res.send(result)
+    })
+
+
+
 
 
     // Send a ping to confirm a successful connection
@@ -62,3 +117,4 @@ app.get('/',(req,res)=>{
 app.listen(port,()=>{
     console.log(`Art-Maker Server is Running>>>>>: ${port}`)
 })
+
