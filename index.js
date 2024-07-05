@@ -58,42 +58,26 @@ async function run() {
       const query = {_id: new ObjectId(req.params.id)}
       const data = {
         $set:{
-          name:req.body.Category_Name,
-          name:req.body.price,
+          Subcategory_Name:req.body.Subcategory_Name,
+          price:req.body.price,
+          Short_Description:req.body.Short_Description,
+          rating:req.body.rating,
         }
       }
-      const result = await CraftCollection.updateOne(query,data)
+      const result = await CraftCollection.updateOne(query,data);
       console.log(result);
       res.send(result)
     })
+  
 
-
-
-
-
-
-
-
-
-
-
-      //________Update________//
-      // app.get('/my/:id',async(req,res)=>{
-      //   const id = req.params.id;
-      //   const query = {_id: new ObjectId(id)}
-      //   const result = await CraftCollection.findOne(query)
-      //   res.send(result)
-      // })
       //__________Delete___________//
     app.delete('/my/:id',async(req,res) => {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await CraftCollection.deleteOne(query)
+      console.log(result)
       res.send(result)
     })
-
-
-
 
 
     // Send a ping to confirm a successful connection
@@ -105,8 +89,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 
 
