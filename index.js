@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 require('dotenv').config()
-const { MongoClient, ServerApiVersion, Long, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 const port = process.env.PORT || 5000;
 
@@ -45,13 +45,22 @@ async function run() {
       const result = await CraftCollection.find({email:req.params.email}).toArray()
       res.send(result)
     })
-        //________GET-2_________//
+        //________GET-2 For Update_________//
     app.get("/singleDetails/:id",async(req,res) =>{
       console.log(req.params.id)
       const result = await CraftCollection.findOne({_id: new ObjectId(req.params.id),})
       console.log(result)
       res.send(result)
     })
+   //________GET-2 For SingleProduct Details_________//
+   app.get("/singleProduct/:id",async(req,res) =>{
+    console.log(req.params.id)
+    const result = await CraftCollection.findOne({_id: new ObjectId(req.params.id),})
+    console.log(result)
+    res.send(result)
+  })
+
+
 
     app.put("/updateCraft/:id",async(req,res) => {
       console.log(req.params.id)
